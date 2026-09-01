@@ -59,11 +59,17 @@ const DECLARATION_DIRECTIVES = Object.freeze({
   '.method': 'method',
 });
 
+const TYPE_DESCRIPTOR_RE =
+  /^\[*(?:L[^;\s]+;|[VZBSCIJFD])(?=$|[\s,(){}:=]|->)/;
+// Method parameters are encoded as adjacent descriptors with no delimiters.
+const PARAMETER_DESCRIPTOR_RE = /^\[*(?:L[^;\s]+;|[VZBSCIJFD])/;
+
 function resetLineState(stream, state) {
   if (!stream.sol()) return;
   state.afterArrow = false;
   state.declaration = null;
   state.firstToken = true;
+  state.inParameterDescriptors = false;
   state.stringQuote = null;
 }
 
@@ -126,6 +132,7 @@ export const smaliStreamParser = {
       afterArrow: false,
       declaration: null,
       firstToken: true,
+      inParameterDescriptors: false,
       stringQuote: null,
     };
   },
@@ -157,7 +164,10 @@ export const smaliStreamParser = {
       return 'keyword';
     }
 
-    if (stream.match(/^\[*(?:L[^;\s]+;|[VZBSCIJFD])(?=$|[\s,(){}:=]|->)/)) {
+    const descriptorPattern = state.inParameterDescriptors
+      ? PARAMETER_DESCRIPTOR_RE
+      : TYPE_DESCRIPTOR_RE;
+    if (stream.match(descriptorPattern)) {
       state.firstToken = false;
       return 'typeName';
     }
@@ -192,6 +202,9 @@ export const smaliStreamParser = {
     if (wordToken) return wordToken;
 
     if (stream.match(/^[()[\]{},:;]/)) {
+      const punctuation = stream.current();
+      if (punctuation === '(') state.inParameterDescriptors = true;
+      if (punctuation === ')') state.inParameterDescriptors = false;
       state.firstToken = false;
       return 'punctuation';
     }

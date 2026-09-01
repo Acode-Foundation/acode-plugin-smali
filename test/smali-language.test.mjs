@@ -43,6 +43,7 @@ test('CodeMirror highlights representative Smali syntax', () => {
     '  value = {"Lcom/example/Example;"}',
     '.end annotation',
     '.method public static main([Ljava/lang/String;)V',
+    '.method public ID(ILjava/lang/String;[I[[Ljava/lang/Object;)Ljava/lang/String;',
     '  .locals 2',
     '  const-string v0, "hello\\nworld" # greeting',
     '  :loop',
@@ -63,6 +64,12 @@ test('CodeMirror highlights representative Smali syntax', () => {
   assertToken(tokens, '0x2', 'number');
   assertToken(tokens, 'main', 'method');
   assertToken(tokens, '[Ljava/lang/String;', 'type');
+  assertToken(tokens, 'ID', 'method');
+  assertToken(
+    tokens,
+    'ILjava/lang/String;[I[[Ljava/lang/Object;',
+    'type',
+  );
   assertToken(tokens, 'v0', 'register');
   assertToken(tokens, 'p0', 'register');
   assertToken(tokens, '\\n', 'escape');
@@ -166,6 +173,9 @@ test('CodeMirror highlights and folds the 500-line compatibility sample', () => 
   assertToken(tokens, 'process08', 'method');
   assertToken(tokens, 'packed-switch', 'keyword');
   assertToken(tokens, 'aput', 'keyword');
+  assertToken(tokens, 'II', 'type');
+  assertToken(tokens, 'DD', 'type');
+  assertToken(tokens, '[[I', 'type');
   assertToken(tokens, '# End-to-end compatibility checkpoint 14', 'comment');
 
   for (const method of ['process01', 'process08', 'updateCount']) {
