@@ -1,20 +1,19 @@
 {
   "presets": [
-    "@babel/preset-env"
+    [
+      "@babel/preset-env",
+      {
+        "bugfixes": true,
+        "forceAllTransforms": true
+      }
+    ]
   ],
   "env": {
     "test": {
       "presets": [
-        "@babel/env"
+        "@babel/preset-env"
       ]
     }
   },
-  "plugins": [
-    "html-tag-js/jsx/jsx-to-tag.js",
-    "html-tag-js/jsx/syntax-parser.js",
-    [
-      "@babel/plugin-transform-runtime"
-    ]
-  ],
   "compact": true
 }
