@@ -1,35 +1,33 @@
 {
   "name": "acode-plugin-smali",
-  "version": "1.0.0",
-  "description": "Acode plugin for smali syntax highlighting",
+  "version": "2.0.0",
+  "description": "Smali syntax highlighting for Acode's Ace and CodeMirror editors",
   "main": "dist/main.js",
   "repository": "https://github.com/deadlyjack/acode-plugin-smali.git",
   "author": "Ajit <me@ajitkumar.dev>",
   "license": "MIT",
-  "dependencies": {
-    "html-tag-js": "^1.1.41"
-  },
   "devDependencies": {
-    "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
-    "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.18.10",
+    "@codemirror/language": "6.12.4",
+    "@codemirror/state": "6.7.1",
+    "@lezer/highlight": "1.2.3",
+    "acorn": "8.18.0",
     "babel-loader": "^9.1.2",
-    "file-loader": "^6.2.0",
     "jszip": "^3.10.1",
-    "live-server": "^1.2.2",
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
+    "pretest": "npm run build-release",
+    "test": "node --test \"test/*.test.*\"",
     "build": "webpack",
     "build-release": "webpack --mode production",
-    "start-dev": "node .vscode/start-dev"
+    "dev": "node dev/start-dev.js",
+    "start-dev": "node dev/start-dev.js"
   },
-  "browserslist": [
-    "> 0.25%, not dead"
-  ],
-  "resolutions": {
+  "browserslist": "Chrome >= 51",
+  "overrides": {
     "terser": ">=5.16.3",
     "glob-parent": ">=5.1.2"
   }
